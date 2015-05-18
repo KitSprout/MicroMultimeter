@@ -22,7 +22,8 @@ Hardware
 
 View
 ========
-
+<img src="https://lh3.googleusercontent.com/-VzpdZtpzjNg/VVoxywxQH-I/AAAAAAAAMhk/bJynfTFcGdM/s1600/DSC_2799.jpg"/>
+<img src="https://lh3.googleusercontent.com/-1nRGmYpGghY/VVoxzV_3yKI/AAAAAAAAMhQ/Gxe08fqVOBo/s1600/DSC_2805.jpg"/>
 
 Schematic
 ========

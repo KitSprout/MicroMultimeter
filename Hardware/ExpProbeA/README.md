@@ -22,8 +22,9 @@ Hardware
 
 View
 ========
-
+<img src="https://lh3.googleusercontent.com/-cdraWfQaeLA/VVoxw5SAh3I/AAAAAAAAMgw/26nEtA1T5DM/s1600/DSC_2787.jpg"/>
+<img src="https://lh3.googleusercontent.com/-UhUEIqr55Pk/VVoxw6B1FBI/AAAAAAAAMg4/4lBU2uu-heg/s1600/DSC_2790.jpg"/>
 
 Schematic
 ========
-<img src="https://lh3.googleusercontent.com/-p_NoSVvZ6-8/VVlhht4PXZI/AAAAAAAAMes/5BZ09TF8dUk/s800/ExpProbeA.png"/>
+<img src="https://lh3.googleusercontent.com/-p_NoSVvZ6-8/VVlhht4PXZI/AAAAAAAAMes/5BZ09TF8dUk/s1600/ExpProbeA.png"/>
