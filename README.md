@@ -2,11 +2,11 @@
 ========
 * Author  : [Hom](http://about.me/Hom)
 * Version : v1.0
-* Update  : 2015/05/18
+* Update  : 2015/05/23
 
 Description
 ========
-MicroMultimeter 是一個多功能的電表，著重於擴充性而精度，以應付日常電路、微控制器開發除錯及測量，基本功能有電阻測量、電壓測量、二極體測量、短路測量、PWM 輸入輸出、波形顯示，搭配其包含 UART、SPI、I2C、PWM 的擴充埠，可及增加更多樣化的應用及延伸。
+MicroMultimeter 是一個多功能的電表，著重於擴充性而非精度，以應付日常電路、微控制器開發除錯及測量，基本功能有電阻測量、電壓測量、二極體測量、短路測量、PWM 輸入輸出、波形顯示，搭配其包含 UART、SPI、I2C、PWM 的擴充埠，可及增加更多樣化的應用及延伸。
 
 License
 ========
@@ -30,11 +30,11 @@ Expansion
 * [ExpIO](https://github.com/KitSprout/MicroMultimeter/tree/master/Hardware/ExpIO) ( 引出所有 I/O )
 * [ExpProbeA](https://github.com/KitSprout/MicroMultimeter/tree/master/Hardware/ExpProbeA) ( 三用電表探棒 4mm )
 * [ExpProbeB](https://github.com/KitSprout/MicroMultimeter/tree/master/Hardware/ExpProbeB) ( 示波器探棒 BNC )
-* [ExpDigiPower](https://github.com/KitSprout/MicroMultimeter/tree/master/Hardware/ExpDigiPower) ( [LM1084](http://www.ti.com/product/lm1084) + [AD5292](http://www.analog.com/en/products/digital-to-analog-converters/precision-dac-lessthanequalto-12mhz/digital-potentiometers/ad5292.html) )
+* [ExpDigiPower](https://github.com/KitSprout/MicroMultimeter/tree/master/Hardware/ExpDigiPower) ( 數位電源 [LM1084](http://www.ti.com/product/lm1084) + [AD5292](http://www.analog.com/en/products/digital-to-analog-converters/precision-dac-lessthanequalto-12mhz/digital-potentiometers/ad5292.html) )
 
 Source Code
 ========
-
+[uMultimeter](https://github.com/KitSprout/MicroMultimeter/tree/master/Software/uMultimeter)
 
 Related Documents
 ========
