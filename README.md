@@ -2,11 +2,11 @@
 ========
 * Author  : [Hom](http://about.me/Hom)
 * Version : v1.0
-* Update  : 2015/05/23
+* Update  : 2015/05/30
 
 Description
 ========
-MicroMultimeter 是一個多功能的電表，著重於擴充性而非精度，以應付日常電路、微控制器開發除錯及測量，基本功能有電阻測量、電壓測量、二極體測量、短路測量、PWM 輸入輸出、波形顯示，搭配其包含 UART、SPI、I2C、PWM 的擴充埠，可及增加更多樣化的應用及延伸。
+MicroMultimeter是一個多功能的數位電表，著重於簡單、攜帶以及擴充性，以應付日常電路、微控制器開發除錯及測量為主要目的。MicroMultimeter同時也是一個開源硬體、軟體的一個項目，相關的資源都可以從GitHub上取得，基本功能有電壓測量、二極體測量、短路斷路測量、PWM輸入輸出、波形顯示，搭配其包含UART、SPI、I2C、PWM的擴充埠，可及增加更多樣化的應用及延伸。
 
 License
 ========
@@ -14,6 +14,8 @@ License
   
 　　<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.zh_TW"><img alt="創用 CC 授權條款" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/tw/80x15.png" /></a>  
 　　<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"> MicroMultimeter v1.0 </span>由<a xmlns:cc="http://creativecommons.org/ns#" href="https://github.com/KitSprout" property="cc:attributionName" rel="cc:attributionURL"> KitSprout </a>製作，以<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/deed.zh_TW"> 創用CC 姓名標示-相同方式分享 4.0 國際 授權條款 </a>釋出。  
+
+* 軟體(Software)採用 [MIT License](http://opensource.org/licenses/MIT) 方式授權  
 
 Hardware
 ========
@@ -48,3 +50,4 @@ Schematic
 ========
 <img src="https://lh3.googleusercontent.com/-JycHgmM4Ze4/VVlIJ4r1ryI/AAAAAAAAMdo/AOCWgxlcUX0/s1600/MicroMultimeter%252520-%252520Main.png" />
 <img src="https://lh3.googleusercontent.com/-_oee-WzoS0w/VVlIJ3AlDtI/AAAAAAAAMdk/Ne3U4tB2Ppc/s1600/MicroMultimeter%252520-%252520All.png" />
+*** 目前 PROBE 電路的電容電阻大小尚在實驗中。
