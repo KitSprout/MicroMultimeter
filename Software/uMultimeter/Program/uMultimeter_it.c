@@ -1,6 +1,7 @@
 /*====================================================================================================*/
 /*====================================================================================================*/
 #include "stm32f1_system.h"
+#include "usb_istr.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
 //volatile uint32_t IC1Value  = 0;
@@ -58,7 +59,10 @@ void PendSV_Handler( void ) { while(1); }
 //void DMA1_Channel7_IRQHandler( void );
 //void ADC1_2_IRQHandler( void );
 //void USB_HP_CAN1_TX_IRQHandler( void );
-//void USB_LP_CAN1_RX0_IRQHandler( void );
+void USB_LP_CAN1_RX0_IRQHandler( void )
+{
+  USB_Istr();
+}
 //void CAN1_RX1_IRQHandler( void );
 //void CAN1_SCE_IRQHandler( void );
 //void EXTI9_5_IRQHandler( void );

@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD, USE_STDPERIPH_DRIVER, ARM_MATH_CM3</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\STM32F10x_StdPeriph_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules;.\RTE;.\RTE\Device\STM32F103CB</IncludePath>
+              <IncludePath>..\;..\Libraries\STM32F10x_StdPeriph_Driver\inc;..\Libraries\STM32F10x_StdPeriph_Driver\src;..\Libraries\STM32_USB-FS-Device_Driver\inc;..\Libraries\STM32_USB-FS-Device_Driver\src;..\Program;..\Program\Algorithms;..\Program\Dirvers;..\Program\Modules;..\Program\Expansion;..\Program\USB-Drivers;.\RTE;.\RTE\Device\STM32F103CB</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -428,6 +428,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\Dirvers\stm32f1_usart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f1_usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Dirvers\stm32f1_usb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -459,11 +464,6 @@
               <FilePath>..\Program\uMultimeter_measure.c</FilePath>
             </File>
             <File>
-              <FileName>uMultimeter_demo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\uMultimeter_demo.c</FilePath>
-            </File>
-            <File>
               <FileName>api_waveForm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\api_waveForm.c</FilePath>
@@ -471,17 +471,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Expand</GroupName>
+          <GroupName>Expansion</GroupName>
           <Files>
             <File>
               <FileName>exp_digiGPIO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\exp_digiGPIO.c</FilePath>
+              <FilePath>..\Program\Expansion\exp_digiGPIO.c</FilePath>
             </File>
             <File>
               <FileName>exp_digiPower.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Program\exp_digiPower.c</FilePath>
+              <FilePath>..\Program\Expansion\exp_digiPower.c</FilePath>
+            </File>
+            <File>
+              <FileName>exp_tachometer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Expansion\exp_tachometer.c</FilePath>
+            </File>
+            <File>
+              <FileName>exp_imu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Expansion\exp_imu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -513,6 +523,11 @@
               <FileType>1</FileType>
               <FilePath>..\Program\Modules\module_ad5292.c</FilePath>
             </File>
+            <File>
+              <FileName>module_mpu9255.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\Modules\module_mpu9255.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -522,6 +537,71 @@
               <FileName>algorithm_string.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\Algorithms\algorithm_string.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>USB-Device</GroupName>
+          <Files>
+            <File>
+              <FileName>usb_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32_USB-FS-Device_Driver\src\usb_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32_USB-FS-Device_Driver\src\usb_init.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_int.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32_USB-FS-Device_Driver\src\usb_int.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_mem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32_USB-FS-Device_Driver\src\usb_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_regs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32_USB-FS-Device_Driver\src\usb_regs.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_sil.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32_USB-FS-Device_Driver\src\usb_sil.c</FilePath>
+            </File>
+            <File>
+              <FileName>hw_config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\USB-Drivers\hw_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_desc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\USB-Drivers\usb_desc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_endp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\USB-Drivers\usb_endp.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_istr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\USB-Drivers\usb_istr.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_prop.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\USB-Drivers\usb_prop.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_pwr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\USB-Drivers\usb_pwr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -568,12 +648,6 @@
           <targetInfo name="STM32F103C"/>
         </targetInfos>
       </component>
-      <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="Flash" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1 STDPERIPH">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="1.1.0"/>
-        <targetInfos>
-          <targetInfo name="STM32F103C"/>
-        </targetInfos>
-      </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="Framework" Cvendor="Keil" Cversion="3.5.1" condition="STM32F1 STDPERIPH">
         <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="1.1.0"/>
         <targetInfos>
@@ -581,6 +655,12 @@
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="GPIO" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1 STDPERIPH RCC">
+        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="1.1.0"/>
+        <targetInfos>
+          <targetInfo name="STM32F103C"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="PWR" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1 STDPERIPH RCC">
         <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="1.1.0"/>
         <targetInfos>
           <targetInfo name="STM32F103C"/>

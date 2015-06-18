@@ -137,7 +137,7 @@ void uMultimeter_demo( void )
   static uM_mode  modeState_move = DEFAULT_MODE;
   static uM_mode  modeState_selNew = DEFAULT_MODE;
   static uM_mode  modeState_selOld = MODE_BDR_MIN;
-  static uM_modeS modeState_selS[5] = { MODES_VOL_DIF, MODES_RES_RES, MODES_PWM_OUT, MODES_WAV_ALL, MODES_EXP };
+  static uM_modeS modeState_selS[5] = { MODES_VOL_DIF, MODES_RES_RES, MODES_PWM_OUT, MODES_WAV_ALL, MODES_EXP_NULL };
 
   while(KEY_R_Read) {
     modeState_move++;

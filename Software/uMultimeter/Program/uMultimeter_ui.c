@@ -6,7 +6,7 @@
 #include "module_ssd1331.h"
 #include "module_buzzer.h"
 #include "uMultimeter_measure.h"
-
+#include "exp_digiPower.h"
 #include "api_waveForm.h"
 /*====================================================================================================*/
 /*====================================================================================================*
@@ -28,6 +28,95 @@ uint8_t getNumDigit( uint8_t *numBuf, uint32_t newNum )
   }
 
   return length;
+}
+/*====================================================================================================*/
+/*====================================================================================================*/
+#define SEL_WINDOW_X 0
+#define SEL_WINDOW_Y OLED_H-1-8
+
+const uint16_t fontMatrix_5x16[12][5] = {
+  {0x4990, 0x4A50, 0x4A50, 0x4A50, 0x319E}, // VOL, 0
+  {0x7BCE, 0x4A10, 0x7B8C, 0x5202, 0x4BDC}, // RES, 1
+  {0xF45B, 0x9455, 0xF555, 0x8551, 0x8291}, // PWM, 2
+  {0x8992, 0x8A52, 0xAA52, 0xABD2, 0x524C}, // WAV, 3
+  {0xF45E, 0x8292, 0xE11E, 0x8290, 0xF450}, // EXP, 4
+
+  {0x1808, 0x241C, 0x2548, 0x2548, 0x19CC}, // OUT, 5
+  {0x0700, 0x0200, 0x0270, 0x0250, 0x0750}, // IN,  6
+  {0x3A58, 0x4248, 0x43C8, 0x4248, 0x3A5C}, // CH1, 7
+  {0x3A5C, 0x4244, 0x43DC, 0x4250, 0x3A5C}, // CH2, 8
+  {0x39DE, 0x2490, 0x249C, 0x2490, 0x39D0}, // DIF, 9
+  {0x39CC, 0x2492, 0x2492, 0x2492, 0x39CC}, // DIO, 10
+  {0x1910, 0x2510, 0x2510, 0x3D10, 0x25DC}, // ALL, 11
+};
+
+void uMultimeterUI_menuDisplay_button( uint8_t CoordiX, uint8_t CoordiY, uint8_t Select, uint16_t FontColor, uint16_t BackColor )
+{
+  OLED_PutChar16(CoordiX + 1, CoordiY + 1, 5, 16, fontMatrix_5x16[Select], FontColor, BackColor);
+  OLED_DrawRectangle(CoordiX, CoordiY, 18, 7, BackColor);
+}
+void uMultimeterUI_menuDisplay( uint32_t mode )
+{
+  uint8_t tmpMode  = Byte32U8_2(mode);
+  uint8_t tmpModeS = Byte32U8_1(mode);
+  
+  switch(tmpMode) {
+    case MODE_VOL:
+      if(tmpModeS == MODE_VOL_CH1)
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 7, WHITE, BLACK);
+      else if(tmpModeS == MODE_VOL_CH2)
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 8, WHITE, BLACK);
+      else
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 9, WHITE, BLACK);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
+      break;
+    case MODE_RES:
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
+      if(tmpModeS == MODE_RES_RES)
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, WHITE, BLACK);
+      else
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 10, WHITE, BLACK);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
+      break;
+    case MODE_PWM:
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
+      if(tmpModeS == MODE_PWM_OUT)
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 5, WHITE, BLACK);
+      else
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 6, WHITE, BLACK);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
+      break;
+    case MODE_WAV:
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
+      if(tmpModeS == MODE_WAV_CH1)
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 7, WHITE, BLACK);
+      else if(tmpModeS == MODE_WAV_CH2)
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 8, WHITE, BLACK);
+      else if(tmpModeS == MODE_WAV_ALL)
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 11, WHITE, BLACK);
+      else
+        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 4, WHITE, BLACK);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
+      break;
+    case MODE_EXP:
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
+      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, WHITE, BLACK);
+      break;
+    default:
+      break;
+  }
 }
 /*====================================================================================================*/
 /*====================================================================================================*/
@@ -93,15 +182,12 @@ void uMultimeterUI_modeVOL_putBigNum16x16( uint8_t CoordiX, uint8_t CoordiY, uin
 #define MODE_VOL_CH1_Y    0
 #define MODE_VOL_NUM1_X   MODE_VOL_CH1_X + 18
 #define MODE_VOL_NUM1_Y   MODE_VOL_CH1_Y
-
 #define MODE_VOL_CH2_X    MODE_VOL_CH1_X + 40
 #define MODE_VOL_CH2_Y    MODE_VOL_CH1_Y
 #define MODE_VOL_NUM2_X   MODE_VOL_CH2_X + 18
 #define MODE_VOL_NUM2_Y   MODE_VOL_CH2_Y
-
 #define MODE_VOL_DCAC_X   82
 #define MODE_VOL_DCAC_Y   MODE_VOL_CH1_Y
-
 #define MODE_VOL_BIGN_X   7
 #define MODE_VOL_BIGN_Y   22
 void uMultimeterUI_modeVOL_setMode( uint8_t mode )
@@ -109,15 +195,15 @@ void uMultimeterUI_modeVOL_setMode( uint8_t mode )
   if(!mode) OLED_PutChar16(MODE_VOL_DCAC_X, MODE_VOL_DCAC_Y, 5, 9, UI_charArray_V5x9_DC, WHITE, BLACK);
   else      OLED_PutChar16(MODE_VOL_DCAC_X, MODE_VOL_DCAC_Y, 5, 9, UI_charArray_V5x9_AC, WHITE, BLACK);
 }
-void uMultimeterUI_modeVOL_Init( uM_modeS modeS )
+void uMultimeterUI_modeVOL_Init( uint8_t mode )
 {
   OLED_DrawRectangleFill(0, 0, OLED_W, OLED_H - 9, BLACK);
   OLED_PutChar16(MODE_VOL_CH1_X, MODE_VOL_CH1_Y, 5, 16, UI_charArray_V5x16_CH1, GREEN, BLACK);
   OLED_PutChar16(MODE_VOL_CH2_X, MODE_VOL_CH2_Y, 5, 16, UI_charArray_V5x16_CH2,  BLUE, BLACK);
   uMultimeterUI_modeVOL_setMode(0);
-  uMultimeterUI_modeVOL(modeS, 0, 0, 0);
+  uMultimeterUI_modeVOL(0, 0, 0);
 }
-void uMultimeterUI_modeVOL( uM_modeS modeS, uint16_t NumCH1, uint16_t NumCH2, uint16_t BigNum )
+void uMultimeterUI_modeVOL( uint16_t NumCH1, uint16_t NumCH2, uint16_t BigNum )
 {
   static uint16_t tmpData = 0;
   uint16_t deltaData = 0;
@@ -217,25 +303,21 @@ void uMultimeterUI_modeRES_putBigNum16x16( uint8_t CoordiX, uint8_t CoordiY, uin
 
 #define MODE_RES_BEEP_X   0
 #define MODE_RES_BEEP_Y   0
-
 #define MODE_RES_MODE_X   20
 #define MODE_RES_MODE_Y   MODE_RES_BEEP_Y
-
 #define MODE_RES_CODE_X   61
 #define MODE_RES_CODE_Y   MODE_RES_BEEP_Y
-
 #define MODE_RES_BIGN_X   7
 #define MODE_RES_BIGN_Y   22
-
 void uMultimeterUI_modeRES_setBeep( uint8_t mode )
 {
   uint16_t tmpMode = (mode) ? YELLOW : WHITE;
 
   OLED_PutChar16(MODE_RES_BEEP_X, MODE_RES_BEEP_Y, 5, 16, UI_charArray_R5x16_BEEP, tmpMode, BLACK);
 }
-void uMultimeterUI_modeRES_setMode( uM_modeS modeS )
+void uMultimeterUI_modeRES_setMode( uint8_t mode )
 {
-  if(modeS == MODES_RES_DIO) {
+  if(mode == MODE_RES_DIO) {
     OLED_PutChar16(MODE_RES_MODE_X + 0*19, MODE_RES_MODE_Y, 5, 16, UI_charArray_R5x16_DIO,  BLUE, BLACK);
     OLED_PutChar16(MODE_RES_MODE_X + 1*19, MODE_RES_MODE_Y, 5, 16, UI_charArray_R5x16_RES, BLACK, BLACK);
   }
@@ -244,30 +326,27 @@ void uMultimeterUI_modeRES_setMode( uM_modeS modeS )
     OLED_PutChar16(MODE_RES_MODE_X + 1*19, MODE_RES_MODE_Y, 5, 16, UI_charArray_R5x16_RES, GREEN, BLACK);
   }
 }
-void uMultimeterUI_modeRES_Init( uM_modeS modeS )
+void uMultimeterUI_modeRES_Init( uint8_t mode )
 {
   OLED_DrawRectangleFill(0, 0, OLED_W, OLED_H - 9, BLACK);
   OLED_PutChar32(MODE_RES_CODE_X, MODE_RES_CODE_Y, 5, 21, UI_charArray_R5x21_CODE, WHITE, BLACK);
 
-  uMultimeterUI_modeRES_setMode(modeS);
+  uMultimeterUI_modeRES_setBeep(1);
+  uMultimeterUI_modeRES_setMode(mode);
 }
-void uMultimeterUI_modeRES( uM_modeS modeS, uint32_t BigNum, uint8_t BeepState )
+void uMultimeterUI_modeRES_RES( uint32_t BigNum, uint8_t BeepState )
 {
   uMultimeterUI_modeRES_setBeep(BeepState);
-  uMultimeterUI_modeRES_setMode(modeS);
 
-  switch(modeS) {
-    case MODES_RES_RES:
-      uMultimeterUI_modeRES_putCodeNum5x3(MODE_RES_CODE_X + 21, MODE_RES_CODE_Y, BigNum, WHITE, BLACK);
-      uMultimeterUI_modeRES_putBigNum16x16(MODE_RES_BIGN_X, MODE_RES_BIGN_Y, BigNum, WHITE, BLACK);
-      break;
-    case MODES_RES_DIO:
-      uMultimeterUI_modeRES_putCodeNum5x3(MODE_RES_CODE_X + 21, MODE_RES_CODE_Y, 0, WHITE, BLACK);
-      uMultimeterUI_modeVOL_putBigNum16x16(MODE_RES_BIGN_X, MODE_RES_BIGN_Y, BigNum, WHITE, BLACK);
-      break;
-    default:
-      break;
-  }
+  uMultimeterUI_modeRES_putCodeNum5x3(MODE_RES_CODE_X + 21, MODE_RES_CODE_Y, BigNum, WHITE, BLACK);
+  uMultimeterUI_modeRES_putBigNum16x16(MODE_RES_BIGN_X, MODE_RES_BIGN_Y, BigNum, WHITE, BLACK);
+}
+void uMultimeterUI_modeRES_DIO( uint32_t BigNum, uint8_t BeepState )
+{
+  uMultimeterUI_modeRES_setBeep(BeepState);
+
+  uMultimeterUI_modeRES_putCodeNum5x3(MODE_RES_CODE_X + 21, MODE_RES_CODE_Y, 0, WHITE, BLACK);
+  uMultimeterUI_modeVOL_putBigNum16x16(MODE_RES_BIGN_X, MODE_RES_BIGN_Y, BigNum, WHITE, BLACK);
 }
 /*====================================================================================================*/
 /*====================================================================================================*/
@@ -375,16 +454,13 @@ void uMultimeterUI_modePWM_putPLUSE( uint8_t CoordiX, uint8_t CoordiY, uint16_t 
 #define MODE_PWM_DUTY_Y   0
 #define MODE_PWM_NUM1_X   MODE_PWM_DUTY_X + 6
 #define MODE_PWM_NUM1_Y   MODE_PWM_DUTY_Y
-
 #define MODE_PWM_FREQ_X   MODE_PWM_DUTY_X + 56
 #define MODE_PWM_FREQ_Y   0
 #define MODE_PWM_NUM2_X   MODE_PWM_FREQ_X + 6
 #define MODE_PWM_NUM2_Y   MODE_PWM_FREQ_Y
-
 #define MODE_PWM_PLUSE_X  12
 #define MODE_PWM_PLUSE_Y  15
-
-void uMultimeterUI_modePWM_Init( uM_modeS modeS )
+void uMultimeterUI_modePWM_Init( uint8_t mode )
 {
   OLED_DrawRectangleFill(0, 0, OLED_W, OLED_H-9, BLACK);
   OLED_PutChar(MODE_PWM_DUTY_X, MODE_PWM_DUTY_Y, 5, 6, UI_charArray_P5x6_D, WHITE, BLACK);
@@ -393,7 +469,7 @@ void uMultimeterUI_modePWM_Init( uM_modeS modeS )
   uMultimeterUI_modePWM_putDutyNum5x4(MODE_PWM_NUM1_X, MODE_PWM_NUM1_Y, 0, WHITE, BLACK);
   uMultimeterUI_modePWM_putFreqNum5x4(MODE_PWM_NUM2_X, MODE_PWM_NUM2_Y, 0, WHITE, BLACK);
 }
-void uMultimeterUI_modePWM( uM_modeS modeS, uint16_t DutyData, uint32_t FreqData )
+void uMultimeterUI_modePWM( uint16_t DutyData, uint32_t FreqData )
 {
   uMultimeterUI_modePWM_putDutyNum5x4(MODE_PWM_NUM1_X, MODE_PWM_NUM1_Y, DutyData, WHITE, BLACK);
   uMultimeterUI_modePWM_putFreqNum5x4(MODE_PWM_NUM2_X, MODE_PWM_NUM2_Y, FreqData, WHITE, BLACK);
@@ -416,146 +492,69 @@ void uMultimeterUI_modeWAV_putNum5x3( uint8_t CoordiX, uint8_t CoordiY, uint16_t
 #define MODE_WAV_CH2_X   50
 #define MODE_WAV_CH2_Y   MODE_WAV_CH1_Y
 
-void uMultimeterUI_modeWAV_Init( uM_modeS modeS )
+void uMultimeterUI_modeWAV_Init( uint8_t mode )
 {
   OLED_DrawRectangleFill(0, 0, OLED_W, OLED_H-9, BLACK);
   OLED_DrawRectangleFill(0, 0, 96, 6, WHITE);
   OLED_DrawRectangleFill(MODE_WAV_CH1_X, MODE_WAV_CH1_Y, 16, 5, GREEN);
   OLED_DrawRectangleFill(MODE_WAV_CH2_X, MODE_WAV_CH1_Y, 16, 5, BLUE);
 }
-void uMultimeterUI_modeWAV( uM_modeS modeS, WaveForm_Struct *pWaveForm )
+void uMultimeterUI_modeWAV_CH1( WaveForm_Struct *pWaveForm )
 {
   uMultimeterUI_modeWAV_putNum5x3(MODE_WAV_CH1_X + 18, MODE_WAV_CH1_Y, pWaveForm->Data[0], BLACK, WHITE);
   uMultimeterUI_modeWAV_putNum5x3(MODE_WAV_CH2_X + 18, MODE_WAV_CH1_Y, pWaveForm->Data[1], BLACK, WHITE);
 
-  switch(modeS) {
-    case MODES_WAV_CH1:
-      pWaveForm->PointColor[0] = BLACK;
-      pWaveForm->PointColor[1] = GREEN;
-      pWaveForm->Data[1] = pWaveForm->Data[0];
-      break;
-    case MODES_WAV_CH2:
-      pWaveForm->PointColor[0] = BLACK;
-      pWaveForm->PointColor[1] = BLUE;
-      break;
-    case MODES_WAV_ALL:
-      pWaveForm->PointColor[0] = GREEN;
-      pWaveForm->PointColor[1] = BLUE;
-      break;
-    default:
-      break;
-  }
+  pWaveForm->PointColor[0] = BLACK;
+  pWaveForm->PointColor[1] = GREEN;
+  pWaveForm->Data[1] = pWaveForm->Data[0];
+  WaveFormPrint(pWaveForm, ENABLE);
+}
+void uMultimeterUI_modeWAV_CH2( WaveForm_Struct *pWaveForm )
+{
+  uMultimeterUI_modeWAV_putNum5x3(MODE_WAV_CH1_X + 18, MODE_WAV_CH1_Y, pWaveForm->Data[0], BLACK, WHITE);
+  uMultimeterUI_modeWAV_putNum5x3(MODE_WAV_CH2_X + 18, MODE_WAV_CH1_Y, pWaveForm->Data[1], BLACK, WHITE);
+
+  pWaveForm->PointColor[0] = BLACK;
+  pWaveForm->PointColor[1] = BLUE;
+  WaveFormPrint(pWaveForm, ENABLE);
+}
+void uMultimeterUI_modeWAV_ALL( WaveForm_Struct *pWaveForm )
+{
+  uMultimeterUI_modeWAV_putNum5x3(MODE_WAV_CH1_X + 18, MODE_WAV_CH1_Y, pWaveForm->Data[0], BLACK, WHITE);
+  uMultimeterUI_modeWAV_putNum5x3(MODE_WAV_CH2_X + 18, MODE_WAV_CH1_Y, pWaveForm->Data[1], BLACK, WHITE);
+
+  pWaveForm->PointColor[0] = GREEN;
+  pWaveForm->PointColor[1] = BLUE;
   WaveFormPrint(pWaveForm, ENABLE);
 }
 /*====================================================================================================*/
 /*====================================================================================================*/
-void uMultimeterUI_modeEXP_Init( uM_modeS modeS )
+#define MODE_EXP_X  4
+#define MODE_EXP_Y  1
+
+void uMultimeterUI_modeEXP_Init( uint8_t mode )
 {
   OLED_DrawRectangleFill(0, 0, OLED_W, OLED_H-9, BLACK);
+  OLED_DrawRectangleFill(0, 0, 11, 11, GREEN);
+  OLED_DrawRectangleFill(14, 0, 5, 11, BLUE);
+  OLED_DrawRectangleFill(22, 0, 74, 11, WHITE);
 
-  // 數位電源, 類比訊號生, 數位電阻, 電流計, 溫度計, 高精度ADC, 轉速計, 慣性測量, 溼度, 磁力計, 回流悍, 數位麥克風
-  // POW,      DAC,        POT,      CUR,    TEMP,   ADC,       ROT,    IMU,      MOI,  MAG,    RFLW,  MIC
-  OLED_PutStr_5x7(4+30*0, 3+10*0, (int8_t*)"POW", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*0, 3+10*1, (int8_t*)"DAC", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*0, 3+10*2, (int8_t*)"POT", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*0, 3+10*3, (int8_t*)"CUR", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*0, 3+10*4, (int8_t*)"ADC", WHITE, BLACK);
-
-  OLED_PutStr_5x7(4+30*1, 3+10*0, (int8_t*)"ROT", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*1, 3+10*1, (int8_t*)"IMU", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*1, 3+10*2, (int8_t*)"MOI", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*1, 3+10*3, (int8_t*)"MAG", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*1, 3+10*4, (int8_t*)"MIC", WHITE, BLACK);
-
-  OLED_PutStr_5x7(4+30*2, 3+10*0, (int8_t*)"TEMP", WHITE, BLACK);
-  OLED_PutStr_5x7(4+30*2, 3+10*1, (int8_t*)"RFLW", WHITE, BLACK);
-}
-void uMultimeterUI_modeEXP( uM_modeS modeS )
-{
-
-}
-/*====================================================================================================*/
-/*====================================================================================================*/
-#define SEL_WINDOW_X 0
-#define SEL_WINDOW_Y OLED_H-1-8
-
-const uint16_t fontMatrix_5x16[12][5] = {
-  {0x4990, 0x4A50, 0x4A50, 0x4A50, 0x319E}, // VOL, 0
-  {0x7BCE, 0x4A10, 0x7B8C, 0x5202, 0x4BDC}, // RES, 1
-  {0xF45B, 0x9455, 0xF555, 0x8551, 0x8291}, // PWM, 2
-  {0x8992, 0x8A52, 0xAA52, 0xABD2, 0x524C}, // WAV, 3
-  {0xF45E, 0x8292, 0xE11E, 0x8290, 0xF450}, // EXP, 4
-
-  {0x1808, 0x241C, 0x2548, 0x2548, 0x19CC}, // OUT, 5
-  {0x0700, 0x0200, 0x0270, 0x0250, 0x0750}, // IN,  6
-  {0x3A58, 0x4248, 0x43C8, 0x4248, 0x3A5C}, // CH1, 7
-  {0x3A5C, 0x4244, 0x43DC, 0x4250, 0x3A5C}, // CH2, 8
-  {0x39DE, 0x2490, 0x249C, 0x2490, 0x39D0}, // DIF, 9
-  {0x39CC, 0x2492, 0x2492, 0x2492, 0x39CC}, // DIO, 10
-  {0x1910, 0x2510, 0x2510, 0x3D10, 0x25DC}, // ALL, 11
-};
-
-void uMultimeterUI_menuDisplay_button( uint8_t CoordiX, uint8_t CoordiY, uint8_t Select, uint16_t FontColor, uint16_t BackColor )
-{
-  OLED_PutChar16(CoordiX+1, CoordiY+1, 5, 16, fontMatrix_5x16[Select], FontColor, BackColor);
-  OLED_DrawRectangle(CoordiX, CoordiY, 18, 7, BackColor);
-}
-void uMultimeterUI_menuDisplay( uM_mode mode, uM_modeS modeS )
-{
   switch(mode) {
-    case MODE_VOL:
-      if(modeS == MODES_VOL_CH1)
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 7, WHITE, BLACK);
-      else if(modeS == MODES_VOL_CH2)
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 8, WHITE, BLACK);
-      else
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 9, WHITE, BLACK);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
-      break;
-    case MODE_RES:
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
-      if(modeS == MODES_RES_RES)
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, WHITE, BLACK);
-      else
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 10, WHITE, BLACK);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
-      break;
-    case MODE_PWM:
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
-      if(modeS == MODES_PWM_OUT)
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 5, WHITE, BLACK);
-      else
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 6, WHITE, BLACK);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
-      break;
-    case MODE_WAV:
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
-      if(modeS == MODES_WAV_CH1)
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 7, WHITE, BLACK);
-      else if(modeS == MODES_WAV_CH2)
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 8, WHITE, BLACK);
-      else
-        uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 11, WHITE, BLACK);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, BLACK, WHITE);
-      break;
-    case MODE_EXP:
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*0, SEL_WINDOW_Y+1, 0, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*1, SEL_WINDOW_Y+1, 1, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*2, SEL_WINDOW_Y+1, 2, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*3, SEL_WINDOW_Y+1, 3, BLACK, WHITE);
-      uMultimeterUI_menuDisplay_button(SEL_WINDOW_X + 1 + 19*4, SEL_WINDOW_Y+1, 4, WHITE, BLACK);
-      break;
-    default:
-      break;
+    case MODE_EXP_NUL:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpNUL",  BLACK, WHITE);  break;
+    case MODE_EXP_POW:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpPOW",  BLACK, WHITE);  break;
+//    case MODE_EXP_POT:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpPOT",  BLACK, WHITE);  break;
+//    case MODE_EXP_CUR:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpCUR",  BLACK, WHITE);  break;
+//    case MODE_EXP_ADC:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpADC",  BLACK, WHITE);  break;
+//    case MODE_EXP_DAC:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpDAC",  BLACK, WHITE);  break;
+//    case MODE_EXP_MOI:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpMOI",  BLACK, WHITE);  break;
+    case MODE_EXP_ROT:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpROT",  BLACK, WHITE);  break;
+//    case MODE_EXP_MAG:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpMAG",  BLACK, WHITE);  break;
+    case MODE_EXP_IMU:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpIMU",  BLACK, WHITE);  break;
+//    case MODE_EXP_MIC:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpMIC",  BLACK, WHITE);  break;
+//    case MODE_EXP_BMP:  OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpBMP",  BLACK, WHITE);  break;
+//    case MODE_EXP_TEMP: OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpTEMP", BLACK, WHITE);  break;
+//    case MODE_EXP_RFLW: OLED_PutStr_5x7(MODE_EXP_X + 24, MODE_EXP_Y, (int8_t*)"ExpRFLW", BLACK, WHITE);  break;
+    default:              break;
   }
 }
 /*====================================================================================================*/

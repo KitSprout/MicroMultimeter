@@ -1,12 +1,15 @@
-/* #include "exp_digiGPIO.h" */
+/* #include "stm32f1_usb.h" */
 
-#ifndef __EXP_DIGIGPIO_H
-#define __EXP_DIGIGPIO_H
+#ifndef __STM32F1_USB_H
+#define __STM32F1_USB_H
 
 #include "stm32f10x.h"
+#include "algorithm_string.h"
 /*=====================================================================================================*/
 /*=====================================================================================================*/
-void ExpGPIO_Config( void );
+void USB_InitVCP( void );
+void USB_VCP_SendStr( uint8_t *sendStr );
+void USB_VCP_SendNum( StrType Type, uint8_t NumLen, int32_t SendData );
 /*=====================================================================================================*/
 /*=====================================================================================================*/
 #endif

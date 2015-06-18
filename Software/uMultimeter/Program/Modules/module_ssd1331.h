@@ -63,7 +63,8 @@ void OLED_PutChar( uint8_t CoordiX, uint8_t CoordiY, uint8_t CharH, uint8_t Char
 void OLED_PutChar16( uint8_t CoordiX, uint8_t CoordiY, uint8_t CharH, uint8_t CharW, const uint16_t *pMatrix, uint16_t FontColor, uint16_t BackColor );
 void OLED_PutChar32( uint8_t CoordiX, uint8_t CoordiY, uint8_t CharH, uint8_t CharW, const uint32_t *pMatrix, uint16_t FontColor, uint16_t BackColor );
 void OLED_PutStr( uint8_t CoordiX, uint8_t CoordiY, int8_t *ChWord, uint16_t FontColor, uint16_t BackColor );
-void OLED_PutNum( uint8_t CoordiX, uint8_t CoordiY, StrType Type, uint8_t Length, uint32_t NumData, uint16_t FontColor, uint16_t BackColor );
+void OLED_PutNum( uint8_t CoordiX, uint8_t CoordiY, StrType Type, uint8_t Length, int32_t NumData, uint16_t FontColor, uint16_t BackColor );
+void OLED_PutNum_5x7( uint8_t CoordiX, uint8_t CoordiY, StrType Type, uint8_t Length, int32_t NumData, uint16_t FontColor, uint16_t BackColor );
 void OLED_TestColoBar( void );
 
 void OLED_PutStr_5x7( uint8_t CoordiX, uint8_t CoordiY, int8_t *ChWord, uint16_t FontColor, uint16_t BackColor );

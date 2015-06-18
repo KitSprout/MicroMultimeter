@@ -2,31 +2,32 @@
 /*=====================================================================================================*/
 #include "stm32f1_system.h"
 #include "uMultimeter.h"
-#include "uMultimeter_demo.h"
+//#include "uMultimeter_demo.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-void demoMode( void )
-{
-  if(KEY_P_Read) {
-    LED_R_Reset;
-    Delay_100ms(10);
-    LED_R_Set;
-    LED_G_Set;
-    LED_B_Set;
-    while(1) {
-      LED_R_Toggle;
-      LED_G_Toggle;
-      LED_B_Toggle;
-      uMultimeter_demo();
-    }
-  }
-}
+//void demoMode( void )
+//{
+//  if(KEY_P_Read) {
+//    LED_R_Reset;
+//    Delay_100ms(10);
+//    LED_R_Set;
+//    LED_G_Set;
+//    LED_B_Set;
+//    while(1) {
+//      LED_R_Toggle;
+//      LED_G_Toggle;
+//      LED_B_Toggle;
+//      uMultimeter_demo();
+//    }
+//  }
+//}
+
 int main( void )
 {
   uMultimeter_SystemInit();
   // Corr parameter, Vmax, Vmin ... 
 
-  demoMode();
+//  demoMode();
 
   while(1) {
     uMultimeter();

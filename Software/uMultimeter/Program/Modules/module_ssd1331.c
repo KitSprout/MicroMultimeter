@@ -540,28 +540,34 @@ void OLED_PutStr_5x7( uint8_t CoordiX, uint8_t CoordiY, int8_t *ChWord, uint16_t
 **使用 : OLED_PutNum(CoordiX, CoordiY, Type_D, Length, NumData, WHITE, BLACK);
 **====================================================================================================*/
 /*====================================================================================================*/
-void OLED_PutNum( uint8_t CoordiX, uint8_t CoordiY, StrType Type, uint8_t Length, uint32_t NumData, uint16_t FontColor, uint16_t BackColor )
+void OLED_PutNum( uint8_t CoordiX, uint8_t CoordiY, StrType Type, uint8_t Length, int32_t NumData, uint16_t FontColor, uint16_t BackColor )
 {
   int8_t TmpNumber[16] = {0};
 
   Str_NumToChar(Type, Length, TmpNumber, NumData);
-  OLED_PutStr(CoordiX, CoordiY, TmpNumber, FontColor, BackColor);
+  OLED_PutStr_5x7(CoordiX, CoordiY, TmpNumber, FontColor, BackColor);
 }
-
-void OLED_PutNum_7x6( uint8_t CoordiX, uint8_t CoordiY, uint8_t Length, uint32_t NumData, uint16_t FontColor, uint16_t BackColor )
+void OLED_PutNum_5x7( uint8_t CoordiX, uint8_t CoordiY, StrType Type, uint8_t Length, int32_t NumData, uint16_t FontColor, uint16_t BackColor )
 {
   int8_t TmpNumber[16] = {0};
-  int8_t* ChWord = TmpNumber;
-  uint16_t OffsetX = 0;
 
-  Str_NumToChar(Type_D, Length, TmpNumber, NumData);
-
-  while(*ChWord) {
-    OLED_PutCharNum_7x6(CoordiX+OffsetX, CoordiY, *ChWord, FontColor, BackColor);
-    ChWord++;
-    OffsetX += 6;
-  }
+  Str_NumToChar(Type, Length, TmpNumber, NumData);
+  OLED_PutStr_5x7(CoordiX, CoordiY, TmpNumber, FontColor, BackColor);
 }
+//void OLED_PutNum_7x6( uint8_t CoordiX, uint8_t CoordiY, uint8_t Length, int32_t NumData, uint16_t FontColor, uint16_t BackColor )
+//{
+//  int8_t TmpNumber[16] = {0};
+//  int8_t* ChWord = TmpNumber;
+//  uint16_t OffsetX = 0;
+
+//  Str_NumToChar(Type_D, Length, TmpNumber, NumData);
+
+//  while(*ChWord) {
+//    OLED_PutCharNum_7x6(CoordiX+OffsetX, CoordiY, *ChWord, FontColor, BackColor);
+//    ChWord++;
+//    OffsetX += 6;
+//  }
+//}
 /*====================================================================================================*/
 /*====================================================================================================*
 **函數 : OLED_TestColoBar
