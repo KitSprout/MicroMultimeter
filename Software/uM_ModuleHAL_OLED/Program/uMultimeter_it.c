@@ -1,6 +1,8 @@
 /*====================================================================================================*/
 /*====================================================================================================*/
 #include "drivers\stm32f3_system.h"
+
+#include "main.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
 void NMI_Handler( void ) { while(1); }
@@ -12,6 +14,9 @@ void SVC_Handler( void ) {}
 void DebugMon_Handler( void ) {}
 void PendSV_Handler( void ) {}
 void SysTick_Handler( void ) { HAL_IncTick(); }
+/*====================================================================================================*/
+/*====================================================================================================*/
+extern TIM_HandleTypeDef TIM_HandleStruct;
 /*====================================================================================================*/
 /*====================================================================================================*/
 //void WWDG_IRQHandler( void ) {}
@@ -43,7 +48,15 @@ void SysTick_Handler( void ) { HAL_IncTick(); }
 //void TIM1_TRG_COM_TIM11_IRQHandler( void ) {}
 //void TIM1_CC_IRQHandler( void ) {}
 //void TIM2_IRQHandler( void ) {}
-//void TIM3_IRQHandler( void ) {}
+void TIM3_IRQHandler( void )
+{
+  if(__HAL_TIM_GET_FLAG(&TIM_HandleStruct, TIM_FLAG_UPDATE) != RESET) {
+    if(__HAL_TIM_GET_IT_SOURCE(&TIM_HandleStruct, TIM_IT_UPDATE) != RESET) {
+      __HAL_TIM_CLEAR_IT(&TIM_HandleStruct, TIM_IT_UPDATE);
+      OLED_fpsTest_UpdateEven_CallBack(&TIM_HandleStruct);
+    }
+  }
+}
 //void TIM4_IRQHandler( void ) {}
 //void I2C1_EV_IRQHandler( void ) {}
 //void I2C1_ER_IRQHandler( void ) {}

@@ -442,14 +442,24 @@
               <FilePath>..\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_hal_cortex.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f3xx_hal_dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_hal_dma.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f3xx_hal_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_hal_rcc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32f3xx_hal_dma.c</FileName>
+              <FileName>stm32f3xx_hal_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_hal_dma.c</FilePath>
+              <FilePath>..\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f3xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F3xx_HAL_Driver\Src\stm32f3xx_hal_tim_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f3xx_hal_gpio.c</FileName>

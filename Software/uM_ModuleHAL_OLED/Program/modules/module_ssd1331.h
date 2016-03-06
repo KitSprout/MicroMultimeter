@@ -65,6 +65,7 @@ void OLED_PutStr( uint8_t CoordiX, uint8_t CoordiY, char *ChWord, uint16_t FontC
 void OLED_PutNum( uint8_t CoordiX, uint8_t CoordiY, StringType Type, uint8_t Length, int32_t NumData, uint16_t FontColor, uint16_t BackColor );
 void OLED_PutNum_5x7( uint8_t CoordiX, uint8_t CoordiY, StringType Type, uint8_t Length, int32_t NumData, uint16_t FontColor, uint16_t BackColor );
 void OLED_TestColoBar( void );
+void OLED_TestFPS( void );
 
 void OLED_PutStr_5x7( uint8_t CoordiX, uint8_t CoordiY, char *ChWord, uint16_t FontColor, uint16_t BackColor );
 void OLED_PutCharNum_7x6( uint8_t CoordiX, uint8_t CoordiY, int8_t ChWord, uint16_t FontColor, uint16_t BackColor );
