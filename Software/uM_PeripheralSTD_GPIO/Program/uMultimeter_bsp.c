@@ -2,27 +2,30 @@
 /*====================================================================================================*/
 #include "drivers\stm32f3_system.h"
 
-#include "uMultimeter.h"
 #include "uMultimeter_bsp.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
-void UM_BSP_GPIO_Init( void )
+void UM_GPIO_Config( void )
 {
   GPIO_InitTypeDef GPIO_InitStruct;
 
-  /* GPIO Clk ******************************************************************/
-  LED_R_GPIO_CLK_ENABLE();
-  LED_G_GPIO_CLK_ENABLE();
-  LED_B_GPIO_CLK_ENABLE();
-  KEY_U_GPIO_CLK_ENABLE();
-  KEY_D_GPIO_CLK_ENABLE();
-  KEY_R_GPIO_CLK_ENABLE();
-  KEY_P_GPIO_CLK_ENABLE();
-  KEY_L_GPIO_CLK_ENABLE();
+  /* Enable all GPIO Clk *******************************************************/
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
+
+  /* GPIO all analog input *****************************************************/
+  GPIO_InitStruct.GPIO_Pin   = GPIO_Pin_All;
+  GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_AN;
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+  GPIO_Init(GPIOB, &GPIO_InitStruct);
+  GPIO_Init(GPIOC, &GPIO_InitStruct);
+  GPIO_InitStruct.GPIO_Pin   = GPIO_Pin_All & (~(GPIO_Pin_13 | GPIO_Pin_14));
+  GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* GPIO Pin ******************************************************************/
-  /* LED */
-
   GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_OUT;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
@@ -37,7 +40,6 @@ void UM_BSP_GPIO_Init( void )
   GPIO_InitStruct.GPIO_Pin   = LED_B_PIN;
   GPIO_Init(LED_B_GPIO_PORT, &GPIO_InitStruct);
 
-  /* KEY */
   GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_IN;
   GPIO_InitStruct.GPIO_OType = GPIO_OType_OD;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;

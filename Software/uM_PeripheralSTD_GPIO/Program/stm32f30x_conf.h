@@ -43,7 +43,7 @@
 //#include "stm32f30x_fmc.h"
 #include "stm32f30x_gpio.h"
 //#include "stm32f30x_hrtim.h"
-//#include "stm32f30x_syscfg.h"
+#include "stm32f30x_syscfg.h"
 //#include "stm32f30x_i2c.h"
 //#include "stm32f30x_iwdg.h"
 //#include "stm32f30x_opamp.h"
