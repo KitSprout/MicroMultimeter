@@ -2,11 +2,10 @@
 /*====================================================================================================*/
 #include "drivers\stm32f3_system.h"
 #include "modules\module_ssd1331.h"
-#include "applications\app_waveForm.h"
 #include "algorithms\algorithm_mathUnit.h"
+#include "applications\app_waveForm.h"
 
 #include "uMultimeter.h"
-#include "uMultimeter_bsp.h"
 /*====================================================================================================*/
 /*====================================================================================================*/
 WaveForm_Struct WaveForm;
@@ -17,23 +16,8 @@ void UM_Init( void )
   SystemInit();
   HAL_InitTick();
 
-  UM_BSP_GPIO_Init();
-
-  SSD1331_Config();
-  delay_ms(100);
-
-  SSD1331_Init();
-
-	WaveForm.Channel       = 2;
-	WaveForm.WindowColor   = WHITE;
-	WaveForm.BackColor     = BLACK;
-	WaveForm.Scale[0]      = 100;
-	WaveForm.Scale[1]      = 100;
-	WaveForm.PointColor[0] = GREEN;
-	WaveForm.PointColor[1] = BLUE;
-  WaveFormInit(&WaveForm);
-
-  OLED_Clear(BLACK);
+  UM_GPIO_Config();
+  UM_SSD1331_Config();
 }
 /*====================================================================================================*/
 /*====================================================================================================*/
@@ -50,8 +34,19 @@ void WaveForm_demo( void )
   WaveForm.Data[1] = data * 3000;
   WaveFormPrint(&WaveForm, ENABLE);
 }
+
 void UM_Loop( void )
 {
+	WaveForm.Channel       = 2;
+	WaveForm.WindowColor   = WHITE;
+	WaveForm.BackColor     = BLACK;
+	WaveForm.Scale[0]      = 100;
+	WaveForm.Scale[1]      = 100;
+	WaveForm.PointColor[0] = GREEN;
+	WaveForm.PointColor[1] = BLUE;
+  WaveFormInit(&WaveForm);
+  OLED_Clear(BLACK);
+
   while(1) {
     WaveForm_demo();
     LED_R_Toggle();

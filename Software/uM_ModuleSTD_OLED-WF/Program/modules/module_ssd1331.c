@@ -8,35 +8,30 @@
 /*====================================================================================================*/
 /*====================================================================================================*/
 #define OLED_SPIx                   SPI3
-#define OLED_SPI_CLK_ENABLE()       RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE)
+#define OLED_SPIx_CLK_ENABLE()      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE)
 
 #define OLED_DC_PIN                 GPIO_Pin_4
 #define OLED_DC_GPIO_PORT           GPIOB
-#define OLED_DC_GPIO_CLK_ENABLE()   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE)
 #define OLED_DC_H()                 __GPIO_SET(OLED_DC_GPIO_PORT, OLED_DC_PIN)
 #define OLED_DC_L()                 __GPIO_RST(OLED_DC_GPIO_PORT, OLED_DC_PIN)
 
 #define OLED_RST_PIN                GPIO_Pin_6
 #define OLED_RST_GPIO_PORT          GPIOB
-#define OLED_RST_GPIO_CLK_ENABLE()  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE)
 #define OLED_RST_H()                __GPIO_SET(OLED_RST_GPIO_PORT, OLED_RST_PIN)
 #define OLED_RST_L()                __GPIO_RST(OLED_RST_GPIO_PORT, OLED_RST_PIN)
 
-#define OLED_CST_PIN                GPIO_Pin_15
-#define OLED_CST_GPIO_PORT          GPIOA
-#define OLED_CST_GPIO_CLK_ENABLE()  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE)
-#define OLED_CST_H()                __GPIO_SET(OLED_CST_GPIO_PORT, OLED_CST_PIN)
-#define OLED_CST_L()                __GPIO_RST(OLED_CST_GPIO_PORT, OLED_CST_PIN)
+#define OLED_CS_PIN                 GPIO_Pin_15
+#define OLED_CS_GPIO_PORT           GPIOA
+#define OLED_CS_H()                 __GPIO_SET(OLED_CS_GPIO_PORT, OLED_CS_PIN)
+#define OLED_CS_L()                 __GPIO_RST(OLED_CS_GPIO_PORT, OLED_CS_PIN)
 
 #define OLED_SCK_PIN                GPIO_Pin_3
 #define OLED_SCK_GPIO_PORT          GPIOB
-#define OLED_SCK_GPIO_CLK_ENABLE()  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE)
 #define OLED_SCK_AF                 GPIO_AF_6
 #define OLED_SCK_SOURCE             GPIO_PinSource3
 
 #define OLED_SDI_PIN                GPIO_Pin_5
 #define OLED_SDI_GPIO_PORT          GPIOB
-#define OLED_SDI_GPIO_CLK_ENABLE()  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE)
 #define OLED_SDI_AF                 GPIO_AF_6
 #define OLED_SDI_SOURCE             GPIO_PinSource5
 /*====================================================================================================*/
@@ -53,13 +48,13 @@ void SSD1331_Config( void )
   GPIO_InitTypeDef GPIO_InitStruct;
   SPI_InitTypeDef SPI_InitStruct;
 
+
   /* SPI Clk ******************************************************************/
-  OLED_SPI_CLK_ENABLE();
-  OLED_DC_GPIO_CLK_ENABLE();
-  OLED_RST_GPIO_CLK_ENABLE();
-  OLED_CST_GPIO_CLK_ENABLE();
-  OLED_SCK_GPIO_CLK_ENABLE();
-  OLED_SDI_GPIO_CLK_ENABLE();
+  OLED_SPIx_CLK_ENABLE();
+
+  /* SPI AF *******************************************************************/
+  GPIO_PinAFConfig(OLED_SCK_GPIO_PORT, OLED_SCK_SOURCE, OLED_SCK_AF);
+  GPIO_PinAFConfig(OLED_SDI_GPIO_PORT, OLED_SDI_SOURCE, OLED_SDI_AF);
 
   /* SPI Pin ******************************************************************/
   GPIO_InitStruct.GPIO_Mode  = GPIO_Mode_OUT;
@@ -67,8 +62,8 @@ void SSD1331_Config( void )
   GPIO_InitStruct.GPIO_PuPd  = GPIO_PuPd_UP;
   GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 
-  GPIO_InitStruct.GPIO_Pin   = OLED_CST_PIN;
-  GPIO_Init(OLED_CST_GPIO_PORT, &GPIO_InitStruct);
+  GPIO_InitStruct.GPIO_Pin   = OLED_CS_PIN;
+  GPIO_Init(OLED_CS_GPIO_PORT, &GPIO_InitStruct);
 
   GPIO_InitStruct.GPIO_Pin   = OLED_DC_PIN;
   GPIO_Init(OLED_DC_GPIO_PORT, &GPIO_InitStruct);
@@ -87,10 +82,7 @@ void SSD1331_Config( void )
   GPIO_InitStruct.GPIO_Pin   = OLED_SDI_PIN;
   GPIO_Init(OLED_SDI_GPIO_PORT, &GPIO_InitStruct);
 
-  GPIO_PinAFConfig(OLED_SCK_GPIO_PORT, OLED_SCK_SOURCE, OLED_SCK_AF);
-  GPIO_PinAFConfig(OLED_SDI_GPIO_PORT, OLED_SDI_SOURCE, OLED_SDI_AF);  
-
-  OLED_CST_H();  // low enable
+  OLED_CS_H();  // LOW ENABLE
 
   /* SPI Init ****************************************************************/
   SPI_InitStruct.SPI_Mode              = SPI_Mode_Master;
@@ -118,10 +110,10 @@ void SSD1331_Config( void )
 /*====================================================================================================*/
 static void OLED_WriteCmd( uint8_t writeCmd )
 {
-  OLED_CST_L();
+  OLED_CS_L();
   OLED_DC_L();
   SPI_RW8(OLED_SPIx, writeCmd);
-  OLED_CST_H();
+  OLED_CS_H();
 }
 /*====================================================================================================*/
 /*====================================================================================================*
@@ -150,11 +142,11 @@ static void OLED_WriteCmd( uint8_t writeCmd )
 /*====================================================================================================*/
 static void OLED_WriteColor( uint16_t color )
 {
-  OLED_CST_L();
+  OLED_CS_L();
   OLED_DC_H();
   SPI_RW8(OLED_SPIx, Byte8H(color));
   SPI_RW8(OLED_SPIx, Byte8L(color));
-  OLED_CST_H();
+  OLED_CS_H();
 }
 /*====================================================================================================*/
 /*====================================================================================================*

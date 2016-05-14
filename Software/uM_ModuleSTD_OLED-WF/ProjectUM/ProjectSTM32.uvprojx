@@ -437,6 +437,11 @@
               <FilePath>..\Libraries\STM32F30x_StdPeriph_Driver\src\stm32f30x_misc.c</FilePath>
             </File>
             <File>
+              <FileName>stm32f30x_syscfg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\STM32F30x_StdPeriph_Driver\src\stm32f30x_syscfg.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32f30x_rcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\STM32F30x_StdPeriph_Driver\src\stm32f30x_rcc.c</FilePath>
@@ -512,14 +517,14 @@
           <GroupName>Module</GroupName>
           <Files>
             <File>
-              <FileName>module_fontlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Program\modules\module_fontlib.c</FilePath>
-            </File>
-            <File>
               <FileName>module_ssd1331.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Program\modules\module_ssd1331.c</FilePath>
+            </File>
+            <File>
+              <FileName>module_fontlib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Program\modules\module_fontlib.c</FilePath>
             </File>
           </Files>
         </Group>
